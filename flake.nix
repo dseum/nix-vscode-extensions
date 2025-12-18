@@ -77,10 +77,6 @@
                 inherit (pkgs) lib;
                 system = final.stdenv.hostPlatform.system;
                 platformCurrent = systemPlatform.${system};
-                # https://github.com/NixOS/nixpkgs/pull/464215 changed the
-                # expected extension from .zip to .vsix. This conditional
-                # avoids breakage for users on older nixpkgs commits.
-                vsixExtension = if pkgs.vscode-utils ? unpackVsixSetupHook then ".vsix" else ".zip";
                 isCompatibleVersion =
                   vscodeVersion: engineVersion:
                   if lib.strings.hasPrefix "^" engineVersion then
@@ -229,7 +225,7 @@
                             # so we need to provide the URL for the extension
                             vsix = prev.fetchurl {
                               inherit url hash;
-                              name = "${name}-${version}${vsixExtension}";
+                              name = "${name}-${version}.vsix";
                             };
 
                             inherit engineVersion platform isRelease;
